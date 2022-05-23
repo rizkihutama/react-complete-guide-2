@@ -1,74 +1,68 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
 import Button from '../UI/Button/Button';
 
 const Login = props => {
-  const [enteredEmail, setEnteredEmail] = useState('');
-  const [emailIsValid, setEmailIsValid] = useState();
-  const [enteredPassword, setEnteredPassword] = useState('');
-  const [passwordIsValid, setPasswordIsValid] = useState();
+  const INITIAL_STATE = {
+    email: '',
+    password: '',
+  };
+
+  const [formInput, setFormInput] = useState(INITIAL_STATE);
+  const [isInputValidate, setIsInputValidate] = useState(INITIAL_STATE);
   const [formIsValid, setFormIsValid] = useState(false);
 
-  const emailChangeHandler = (event) => {
-    setEnteredEmail(event.target.value);
-
+  useEffect(() => {
     setFormIsValid(
-      event.target.value.includes('@') && enteredPassword.trim().length > 6
+      formInput.email.includes('@') && formInput.password.length > 6
     );
+  }, [formInput]);
+
+  const inputChangeHandler = event => {
+    const { name, value } = event.target;
+    setFormInput({ ...formInput, [name]: value });
   };
 
-  const passwordChangeHandler = (event) => {
-    setEnteredPassword(event.target.value);
-
-    setFormIsValid(
-      event.target.value.trim().length > 6 && enteredEmail.includes('@')
-    );
-  };
-
-  const validateEmailHandler = () => {
-    setEmailIsValid(enteredEmail.includes('@'));
-  };
-
-  const validatePasswordHandler = () => {
-    setPasswordIsValid(enteredPassword.trim().length > 6);
+  const validateInputHandler = () => {
+    const emailValid = formInput.email.includes('@');
+    const passwordValid = formInput.password.length > 6;
+    setIsInputValidate({ emailValid, passwordValid });
   };
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(enteredEmail, enteredPassword);
+    props.onLogin(formInput.email, formInput.password);
   };
 
   return (
     <Card className={classes.login}>
       <form onSubmit={submitHandler}>
-        <div
-          className={`${classes.control} ${emailIsValid === false ? classes.invalid : ''
-            }`}
-        >
+        <div className={`${classes.control} ${isInputValidate.email === false ? classes.invalid : ''}`}>
           <label htmlFor="email">E-Mail</label>
           <input
             type="email"
             id="email"
-            value={enteredEmail}
-            onChange={emailChangeHandler}
-            onBlur={validateEmailHandler}
+            name="email"
+            value={formInput.email}
+            onChange={inputChangeHandler}
+            onBlur={validateInputHandler}
           />
         </div>
-        <div
-          className={`${classes.control} ${passwordIsValid === false ? classes.invalid : ''
-            }`}
-        >
+
+        <div className={`${classes.control} ${isInputValidate.password === false ? classes.invalid : ''}`}>
           <label htmlFor="password">Password</label>
           <input
             type="password"
             id="password"
-            value={enteredPassword}
-            onChange={passwordChangeHandler}
-            onBlur={validatePasswordHandler}
+            name="password"
+            value={formInput.password}
+            onChange={inputChangeHandler}
+            onBlur={validateInputHandler}
           />
         </div>
+
         <div className={classes.actions}>
           <Button type="submit" className={classes.btn} disabled={!formIsValid}>
             Login
