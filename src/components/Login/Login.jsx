@@ -11,13 +11,21 @@ const Login = props => {
   };
 
   const [formInput, setFormInput] = useState(INITIAL_STATE);
-  const [isInputValidate, setIsInputValidate] = useState(INITIAL_STATE);
+  const [isEmailValid, setIsEmailValid] = useState();
+  const [isPasswordValid, setIsPasswordValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
 
   useEffect(() => {
-    setFormIsValid(
-      formInput.email.includes('@') && formInput.password.length > 6
-    );
+    const debouncer = setTimeout(() => {
+      setFormIsValid(
+        formInput.email.includes('@') && formInput.password.length > 6
+      );
+    }, 500);
+
+    // clear timeout if component is unmounted
+    return () => {
+      clearTimeout(debouncer);
+    };
   }, [formInput]);
 
   const inputChangeHandler = event => {
@@ -25,13 +33,15 @@ const Login = props => {
     setFormInput({ ...formInput, [name]: value });
   };
 
-  const validateInputHandler = () => {
-    const emailValid = formInput.email.includes('@');
-    const passwordValid = formInput.password.length > 6;
-    setIsInputValidate({ emailValid, passwordValid });
+  const validateEmailHandler = () => {
+    setIsEmailValid(formInput.email.includes('@'));
   };
 
-  const submitHandler = (event) => {
+  const validatePasswordHandler = () => {
+    setIsPasswordValid(formInput.password.length > 6);
+  };
+
+  const submitHandler = event => {
     event.preventDefault();
     props.onLogin(formInput.email, formInput.password);
   };
@@ -39,7 +49,7 @@ const Login = props => {
   return (
     <Card className={classes.login}>
       <form onSubmit={submitHandler}>
-        <div className={`${classes.control} ${isInputValidate.email === false ? classes.invalid : ''}`}>
+        <div className={`${classes.control} ${isEmailValid === false ? classes.invalid : ''}`}>
           <label htmlFor="email">E-Mail</label>
           <input
             type="email"
@@ -47,11 +57,11 @@ const Login = props => {
             name="email"
             value={formInput.email}
             onChange={inputChangeHandler}
-            onBlur={validateInputHandler}
+            onBlur={validateEmailHandler}
           />
         </div>
 
-        <div className={`${classes.control} ${isInputValidate.password === false ? classes.invalid : ''}`}>
+        <div className={`${classes.control} ${isPasswordValid === false ? classes.invalid : ''}`}>
           <label htmlFor="password">Password</label>
           <input
             type="password"
@@ -59,7 +69,7 @@ const Login = props => {
             name="password"
             value={formInput.password}
             onChange={inputChangeHandler}
-            onBlur={validateInputHandler}
+            onBlur={validatePasswordHandler}
           />
         </div>
 
