@@ -42,9 +42,7 @@ const Login = () => {
   useEffect(() => {
     const identifier = setTimeout(() => {
       console.log('Checking form validity!');
-      setFormIsValid(
-        emailIsValid && passwordIsValid
-      );
+      setFormIsValid(emailIsValid && passwordIsValid);
     }, 500);
 
     return () => {
@@ -69,7 +67,7 @@ const Login = () => {
     dispatchPassword({ type: 'INPUT_BLUR' });
   };
 
-  const submitHandler = (event) => {
+  const submitHandler = event => {
     event.preventDefault();
     authCtx.onLogin(emailState.value, passwordState.value);
   };
