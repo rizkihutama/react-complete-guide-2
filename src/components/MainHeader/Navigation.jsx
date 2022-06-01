@@ -4,24 +4,24 @@ import AuthContext from '../../context/auth-context';
 import classes from './Navigation.module.css';
 
 const Navigation = () => {
-  const context = useContext(AuthContext);
+  const authCtx = useContext(AuthContext);
 
   return (
     <nav className={classes.nav}>
       <ul>
-        {context.isLoggedIn && (
+        {authCtx.isLoggedIn && (
           <li>
             <a href="/">Users</a>
           </li>
         )}
-        {context.isLoggedIn && (
+        {authCtx.isLoggedIn && (
           <li>
             <a href="/">Admin</a>
           </li>
         )}
-        {context.isLoggedIn && (
+        {authCtx.isLoggedIn && (
           <li>
-            <button onClick={context.onLogout}>Logout</button>
+            <button onClick={authCtx.onLogout}>Logout</button>
           </li>
         )}
       </ul>
