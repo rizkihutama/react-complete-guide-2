@@ -4,6 +4,7 @@ import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
 import Button from '../UI/Button/Button';
 import AuthContext from '../../context/auth-context';
+import InputForm from '../UI/InputForm/InputForm';
 
 const emailReducer = (state, action) => {
   switch (action.type) {
@@ -51,20 +52,24 @@ const Login = () => {
     };
   }, [emailIsValid, passwordIsValid]);
 
-  const emailChangeHandler = event => {
-    dispatchEmail({ type: 'INPUT_USER', value: event.target.value });
+  const inputChangeHandler = event => {
+    const { name, value } = event.target;
+
+    if (name === 'email') {
+      dispatchEmail({ type: 'INPUT_USER', value });
+    } else if (name === 'password') {
+      dispatchPassword({ type: 'INPUT_USER', value });
+    }
   };
 
-  const passwordChangeHandler = event => {
-    dispatchPassword({ type: 'INPUT_USER', value: event.target.value });
-  };
+  const validateInputHandler = event => {
+    const { name } = event.target;
 
-  const validateEmailHandler = () => {
-    dispatchEmail({ type: 'INPUT_BLUR' });
-  };
-
-  const validatePasswordHandler = () => {
-    dispatchPassword({ type: 'INPUT_BLUR' });
+    if (name === 'email') {
+      dispatchEmail({ type: 'INPUT_BLUR' });
+    } else if (name === 'password') {
+      dispatchPassword({ type: 'INPUT_BLUR' });
+    }
   };
 
   const submitHandler = event => {
@@ -75,26 +80,22 @@ const Login = () => {
   return (
     <Card className={classes.login}>
       <form onSubmit={submitHandler}>
-        <div className={`${classes.control} ${emailState.isValid === false ? classes.invalid : ''}`}>
-          <label htmlFor="email">E-Mail</label>
-          <input
-            type="email"
-            id="email"
-            value={emailState.value}
-            onChange={emailChangeHandler}
-            onBlur={validateEmailHandler}
-          />
-        </div>
-        <div className={`${classes.control} ${passwordState.isValid === false ? classes.invalid : ''}`}>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={passwordState.value}
-            onChange={passwordChangeHandler}
-            onBlur={validatePasswordHandler}
-          />
-        </div>
+        <InputForm
+          label="Email"
+          id="email"
+          name="email"
+          value={emailState.value}
+          onChange={inputChangeHandler}
+          onBlur={validateInputHandler}
+        />
+        <InputForm
+          label="Password"
+          id="password"
+          name="password"
+          value={passwordState.value}
+          onChange={inputChangeHandler}
+          onBlur={validateInputHandler}
+        />
         <div className={classes.actions}>
           <Button type="submit" className={classes.btn} disabled={!formIsValid}>
             Login
