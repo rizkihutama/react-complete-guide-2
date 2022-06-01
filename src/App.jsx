@@ -14,8 +14,6 @@ function App() {
     if (userData) setIsLoggedIn(true);
   }, [isLoggedIn]);
 
-
-
   const loginHandler = (email, password) => {
     // We should of course check email and password
     // But it's just a dummy/ demo anyways
@@ -31,6 +29,7 @@ function App() {
   return (
     <AuthContext.Provider value={{
       isLoggedIn: isLoggedIn,
+      onLogout: logoutHandler,
     }}>
       <MainHeader onLogout={logoutHandler} />
       <main>
