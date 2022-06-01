@@ -27,10 +27,6 @@ const passwordReducer = (state, action) => {
 };
 
 const Login = props => {
-  // const [enteredEmail, setEnteredEmail] = useState('');
-  // const [emailIsValid, setEmailIsValid] = useState();
-  // const [enteredPassword, setEnteredPassword] = useState('');
-  // const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
 
   const [emailState, dispatchEmail] = useReducer(emailReducer, { value: '', isValid: null });
@@ -55,30 +51,18 @@ const Login = props => {
   }, [emailIsValid, passwordIsValid]);
 
   const emailChangeHandler = event => {
-    // setEnteredEmail(event.target.value);
     dispatchEmail({ type: 'INPUT_USER', value: event.target.value });
-
-    // setFormIsValid(
-    //   event.target.value.includes('@') && passwordState.isValid
-    // );
   };
 
   const passwordChangeHandler = event => {
-    // setEnteredPassword(event.target.value);
     dispatchPassword({ type: 'INPUT_USER', value: event.target.value });
-
-    // setFormIsValid(
-    //   emailState.isValid && event.target.value.trim().length > 6
-    // );
   };
 
   const validateEmailHandler = () => {
-    // setEmailIsValid(emailState.isValid);
     dispatchEmail({ type: 'INPUT_BLUR' });
   };
 
   const validatePasswordHandler = () => {
-    // setPasswordIsValid(enteredPassword.trim().length > 6);
     dispatchPassword({ type: 'INPUT_BLUR' });
   };
 
@@ -90,8 +74,7 @@ const Login = props => {
   return (
     <Card className={classes.login}>
       <form onSubmit={submitHandler}>
-        <div
-          className={`${classes.control} ${emailState.isValid === false ? classes.invalid : ''}`}>
+        <div className={`${classes.control} ${emailState.isValid === false ? classes.invalid : ''}`}>
           <label htmlFor="email">E-Mail</label>
           <input
             type="email"
@@ -101,8 +84,7 @@ const Login = props => {
             onBlur={validateEmailHandler}
           />
         </div>
-        <div
-          className={`${classes.control} ${passwordState.isValid === false ? classes.invalid : ''}`}>
+        <div className={`${classes.control} ${passwordState.isValid === false ? classes.invalid : ''}`}>
           <label htmlFor="password">Password</label>
           <input
             type="password"
