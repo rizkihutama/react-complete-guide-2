@@ -42,12 +42,12 @@ const Login = () => {
 
   useEffect(() => {
     const identifier = setTimeout(() => {
-      console.log('Checking form validity!');
+      // console.log('Checking form validity!');
       setFormIsValid(emailIsValid && passwordIsValid);
     }, 500);
 
     return () => {
-      console.log('CLEANUP');
+      // console.log('CLEANUP');
       clearTimeout(identifier);
     };
   }, [emailIsValid, passwordIsValid]);
@@ -81,17 +81,21 @@ const Login = () => {
     <Card className={classes.login}>
       <form onSubmit={submitHandler}>
         <InputForm
+          isValid={emailState.isValid}
           label="Email"
           id="email"
           name="email"
+          type="text"
           value={emailState.value}
           onChange={inputChangeHandler}
           onBlur={validateInputHandler}
         />
         <InputForm
+          isValid={passwordState.isValid}
           label="Password"
           id="password"
           name="password"
+          type="password"
           value={passwordState.value}
           onChange={inputChangeHandler}
           onBlur={validateInputHandler}
